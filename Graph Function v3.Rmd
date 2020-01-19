@@ -1,0 +1,160 @@
+---
+title: "Graph Function for univariate and bivariate analysis"
+Created By : Kunal Bharadwaj(D19016), Veera Vignesh(D19036)
+---
+
+## Graph Function:
+
+The purpose of this fuction is to automate the process of exploratory data analysis and generate univariate and bivariate graphs for the metrics.
+
+## Output of the function:
+
+1) Univariate graphs: 
+
+Numerical Variables-Histogram and Box plot
+Categorical variables-Pie Chart and Bar plot
+
+2) Bivariate graphs:
+
+Numerical vs Numerical - Scatter plot
+Categorical vs Numerical - Box plot
+
+3) Correlation matrix
+
+## Code:
+
+
+```{r graph}
+#Function definition
+graphs <- function(data,var=0,folder = getwd())
+{
+  library(corrplot)
+  library(tidyverse)
+  
+  #Checking whether the data is passed as dataframe or else we stop the function execution and display a message to the user
+  if(!is.data.frame(data))
+    stop("The given object is not a data frame")
+  
+  #If no var is specified we take all the columns of the data
+  if (var == 0)
+    var = 1:ncol(data)
+  
+  #if the folder specified is not present we are setting it to the current directory
+  if (!file.exists(folder)){
+    print(paste('The path does not exist. Plots will be saved in working directory:' , getwd()))
+    folder = getwd()
+  }
+  
+  #Univariate analysis
+  
+  #Looping over the var
+  
+  for(i in var)
+  {
+    if(is.numeric(data[,i]))
+    {
+      data_level = length(levels(factor(data[,i])))
+      if(data_level > 10){
+        png(filename = paste(folder,paste('/',names(data)[i], ".png", sep=""),sep = ''))
+        
+        par(mfrow=c(2,1))
+        #Box Plot
+        boxplot(data[,i], main = paste("Boxplot of", names(data)[i]),
+                ylab = names(data)[i], col = "maroon", border = "grey5",
+                horizontal = T)
+        
+        # Histogram
+        
+        hist(data[,i], main = paste("Histogram of", names(data)[i]),
+             xlab = names(data)[i], ylab = "Frequency", col = "lightgreen", border=F)
+        dev.off()
+      }
+      else{
+        png(filename = paste(folder,paste('/',names(data)[i], ".png", sep=""),sep = ''))
+        par(mfrow=c(2,1))
+        
+        # Pie Chart
+        pie(table(data[,i]), main = paste("Pie Chart of", names(data)[i]),
+            col = rainbow(length((table(data[,i])))),radius = 1
+        )
+        
+        # Bar Plot
+        
+        barplot(table(data[,i]), main = paste("Barplot of", names(data)[i]),
+                xlab = names(data)[i], ylab = "Frequency", col = "lightgreen")
+        
+        dev.off()
+      }
+      
+    }
+    
+  }
+  
+  #Bivariate analysis
+  
+  #Categorizing in numerical and categorical
+  num_data<-data %>% select_if(is.numeric)
+  cat_data<-data %>% select_if(is.factor)
+  
+  var1=1:(ncol(num_data)-1)
+  var2=2:(ncol(num_data))
+  for(i in var1)
+  {
+    for (j in var2)
+    {
+  #Scatter plot
+      png(filename = paste(folder,paste('/',paste(names(num_data[i]),"vs",names(num_data[j])), ".png", sep=""),sep = ''))
+      plot(num_data[,i], num_data[,j], main = paste(names(num_data[i]),"vs",names(num_data[j])),
+           xlab = names(num_data[i]), ylab = names(num_data[j]),
+           pch = 19, frame = FALSE,col=rgb((runif(1, min=0, max=1)),(runif(1, min=0, max=1)),(runif(1, min=0, max=1))))
+      dev.off()
+    }
+  }
+  
+  if (dim(cat_data)[2]>0) {
+    cat_var=1:(ncol(cat_data))
+    num_var=1:(ncol(num_data))
+    for(i in cat_var)
+    {
+      for (j in num_var)
+      {
+    #Box plot for groups
+        png(filename = paste(folder,paste('/',paste(names(cat_data[i]),"vs",names(num_data[j])), ".png", sep=""),sep = ''))
+        plot(cat_data[,i], num_data[,j], main = paste(names(cat_data[i]),"vs",names(num_data[j])),
+             xlab = names(cat_data[i]), ylab = names(num_data[j]),
+             pch = 19, frame = FALSE,col=rgb((runif(1, min=0, max=1)),(runif(1, min=0, max=1)),(runif(1, min=0, max=1))))
+        dev.off()
+      }
+    }
+    
+  }
+  
+  
+  
+  # Correlation Matrix Heatmap
+  png(filename = paste(folder,paste('/',"Correlation_plot", ".png", sep=""),sep = ''))
+  corrplot(cor(num_data), method="color",
+           diag=FALSE, # tl.pos="d",
+           type="upper", order="hclust",
+           title = 'Correlation plot of Data',
+           addCoef.col = "black",
+           mar=c(0,0,1,0)
+  )
+  dev.off()
+  print(paste("the plots are generated:",folder))
+}
+```
+
+## loading the data
+```{r}
+
+data=read.csv("C:/Users/kunal/Desktop/Praxis/R/cars.csv")
+head(data)
+
+```
+
+## Calling the graph function
+```{r}
+graphs(data,folder="C:/Users/kunal/Desktop/Praxis/R/R assignment/images")
+```
+
