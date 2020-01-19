@@ -1,0 +1,114 @@
+[[1]]
+[1] "Age"
+
+$p.value
+[1] 1.37976e-08
+
+[[3]]
+[1] "Attrition"
+
+$p.value
+[1] 5.204488e-320
+
+[[5]]
+[1] "BusinessTravel"
+
+$p.value
+[1] 5.608614e-06
+
+[[7]]
+[1] "Department"
+
+$p.value
+[1] 0.004525607
+
+[[9]]
+[1] "EducationField"
+
+$p.value
+[1] 0.00677398
+
+[[11]]
+[1] "EnvironmentSatisfaction"
+
+$p.value
+[1] 5.123469e-05
+
+[[13]]
+[1] "Gender"
+
+$p.value
+[1] 0.2905724
+
+[[15]]
+[1] "JobInvolvement"
+
+$p.value
+[1] 2.863181e-06
+
+[[17]]
+[1] "JobLevel"
+
+$p.value
+[1] 6.634685e-15
+
+[[19]]
+[1] "JobSatisfaction"
+
+$p.value
+[1] 0.0005563005
+
+[[21]]
+[1] "MaritalStatus"
+
+$p.value
+[1] 9.455511e-11
+
+[[23]]
+[1] "MonthlyIncome"
+
+$p.value
+[1] 4.433589e-13
+
+[[25]]
+[1] "OverTime"
+
+$p.value
+[1] 8.158424e-21
+
+[[27]]
+[1] "TotalWorkingYears"
+
+$p.value
+[1] 1.159817e-11
+
+[[29]]
+[1] "WorkLifeBalance"
+
+$p.value
+[1] 0.0009725699
+
+[[31]]
+[1] "YearsAtCompany"
+
+$p.value
+[1] 2.285905e-07
+
+[[33]]
+[1] "YearsInCurrentRole"
+
+$p.value
+[1] 3.18739e-11
+
+[[35]]
+[1] "YearsSinceLastPromotion"
+
+$p.value
+[1] 0.1986513
+
+[[37]]
+[1] "YearsWithCurrManager"
+
+$p.value
+[1] 1.185022e-10
+

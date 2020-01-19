@@ -1,0 +1,100 @@
+---
+title: "statistical test"
+Created By : Kunal Bharadwaj(D19016)
+---
+
+## Statistical testing:
+
+The purpose of this fuction is to automate the t-test and chi square test on the given dataset for the target variable.
+
+## Input:
+
+The input required for the function is the dataset on which the statistical testing needs to be performed
+and the target variable.
+
+## process:
+
+The stat_test fuction checks the type of the variable of the dataset and performs the following test:
+
+a) chi-square test for categorical variables
+b) t-test for categorical variables
+
+append the p-value for each variable in a list and give the output
+
+## code:
+```{r stat_test}
+stat_test<-function(data,target_var)
+{
+  #check if the target is binary or not
+  if (length(unique(data[,target_var])) == 2){
+    #check if the data is a dataframe or not
+    if(is.data.frame(data)){
+      name = colnames(data)
+      
+      #check if the target is available in the data
+      if (target_var %in% name){
+        x<-data[colnames(data)!=target_var]
+        
+        p_value=c()
+        
+        
+        var= 1:ncol(data)
+        
+        
+        for(i in var){
+          # check if the variable is categorical or the values are less than 10
+          if (class(i)=="factor" | ((length(unique(data[,i])))<10 )) 
+          {
+          #perform chi-square test
+            c_test=suppressWarnings(chisq.test(x = data[,i],y = data[,2]))
+            chisq_test=c_test[3]
+          #store the p-value in the list  
+            p_value <- c(p_value,colnames(data[i]), chisq_test)
+          }
+            
+          else{
+          #if variable is numerical, perform t-test   
+            t_t=t.test(data[,i]~data[,target_var])
+            t_test=t_t[3]
+            #store the p-value in the list
+            p_value <- c(p_value,colnames(data[i]), t_test)
+            
+          }
+         
+        }
+      }
+      else{
+        print('Error! variable is not in dataframe')
+      }
+
+    }
+    else{
+      print('Error! Not a data frame!')
+    }
+  }
+  else{
+    print('Error! The target variable is not binary!')
+  }
+  return(p_value)
+}
+```
+
+
+## loading the data
+
+```{r}
+att=read.csv("attrition.csv")
+head(att)
+```
+
+## applying stat_test fuction and retrieving p-values for all the variables
+
+```{r}
+stat_test(att,"Attrition")
+```
+
+```{r}
+#writing the output in text file
+capture.output(stat_test(att,"Attrition"), file = "p_value.txt")
+```
+
